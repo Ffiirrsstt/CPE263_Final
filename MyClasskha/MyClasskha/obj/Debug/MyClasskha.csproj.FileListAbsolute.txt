@@ -1,0 +1,10 @@
+D:\มหาลัย\cpe263\MyClasskha\MyClasskha\bin\Debug\MyClasskha.exe.config
+D:\มหาลัย\cpe263\MyClasskha\MyClasskha\bin\Debug\MyClasskha.exe
+D:\มหาลัย\cpe263\MyClasskha\MyClasskha\bin\Debug\MyClasskha.pdb
+D:\มหาลัย\cpe263\MyClasskha\MyClasskha\obj\Debug\MyClasskha.csproj.AssemblyReference.cache
+D:\มหาลัย\cpe263\MyClasskha\MyClasskha\obj\Debug\MyClasskha.Form1.resources
+D:\มหาลัย\cpe263\MyClasskha\MyClasskha\obj\Debug\MyClasskha.Properties.Resources.resources
+D:\มหาลัย\cpe263\MyClasskha\MyClasskha\obj\Debug\MyClasskha.csproj.GenerateResource.cache
+D:\มหาลัย\cpe263\MyClasskha\MyClasskha\obj\Debug\MyClasskha.csproj.CoreCompileInputs.cache
+D:\มหาลัย\cpe263\MyClasskha\MyClasskha\obj\Debug\MyClasskha.exe
+D:\มหาลัย\cpe263\MyClasskha\MyClasskha\obj\Debug\MyClasskha.pdb
