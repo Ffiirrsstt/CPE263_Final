@@ -63,10 +63,12 @@ namespace MyClasskha
 
         public void Working(string data)
         {
-            if (data =="ON")
+            if (data == "ON")
                 MessageBox.Show("อุปกรณ์กำลังทำงาน");
-            else if(data=="OFF")
+            else if (data == "OFF")
                 MessageBox.Show("อุปกรณ์หยุดทำงาน");
+            else
+                MessageBox.Show("กรุณากรอกเป็น \"ON\" หรือ \"OFF\" เท่านั้น");
         }
     }
 }

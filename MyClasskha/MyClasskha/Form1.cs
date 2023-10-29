@@ -44,6 +44,14 @@ namespace MyClasskha
             timeTV.Enabled = true;
         }
 
+        //ปิดช่องทีวี
+        void EnabledBtnTV()
+        {
+            typeforTV.Enabled = false;
+            screenforTV.Enabled = false;
+            saveNoforTV.Enabled = false;
+        }
+
         //แสดงผลข้อมูล
         void DataElectOutput()
         {
@@ -60,14 +68,29 @@ namespace MyClasskha
                 + "\nTV Save No : " + objectforTV.SaveNo);
         }
 
+        //ปิดช่องกรอกข้อมูลหน้าอุปกรณ์ไฟฟ้า
+        void EnabledBtnEleData()
+        {
+            comp.Enabled = false;
+            type.Enabled = false;
+            life.Enabled = false;
+            forNo.Enabled = false;
+        }
+
         //สำหรับส่วนของ Elect
         private void btnOjeectEle_Click(object sender, EventArgs e)
         {
             objectforElect = new Electricalappliance();
             setDataElect();
             DataElectOutput();
+
+            //เปิดปุ่มการทำงานและช่องกรอกสถานะ
             ONOFF.Enabled = true;
+            btnWorking.Enabled = true;
+
+            //ปิดช่องการกรอกข้อมูลเกี่ยวกับพวกบริษัท และปิดการทำงานปุ่มสร้างออปเจ็คท์อุปกรณ์ไฟฟ้า
             btnOjeectEle.Enabled = false;
+            EnabledBtnEleData();
         }
 
         private void btnWorking_Click(object sender, EventArgs e)
@@ -81,8 +104,11 @@ namespace MyClasskha
             objectforTV = new TV();
             setDataTV();
             DataTVOutput();
+
             openBtnforTVShow();
             btnforTVShow.Enabled = true;
+
+            EnabledBtnTV();
             btnCreateOjectTV.Enabled = false;
         }
 

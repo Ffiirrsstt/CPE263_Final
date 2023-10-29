@@ -8,3 +8,13 @@ D:\มหาลัย\cpe263\MyClasskha\MyClasskha\obj\Debug\MyClasskha.csproj.G
 D:\มหาลัย\cpe263\MyClasskha\MyClasskha\obj\Debug\MyClasskha.csproj.CoreCompileInputs.cache
 D:\มหาลัย\cpe263\MyClasskha\MyClasskha\obj\Debug\MyClasskha.exe
 D:\มหาลัย\cpe263\MyClasskha\MyClasskha\obj\Debug\MyClasskha.pdb
+C:\Users\LENOVO\Desktop\GitHub\First-s_iPad_Store\CPE263_Final\MyClasskha\MyClasskha\bin\Debug\MyClasskha.exe.config
+C:\Users\LENOVO\Desktop\GitHub\First-s_iPad_Store\CPE263_Final\MyClasskha\MyClasskha\bin\Debug\MyClasskha.exe
+C:\Users\LENOVO\Desktop\GitHub\First-s_iPad_Store\CPE263_Final\MyClasskha\MyClasskha\bin\Debug\MyClasskha.pdb
+C:\Users\LENOVO\Desktop\GitHub\First-s_iPad_Store\CPE263_Final\MyClasskha\MyClasskha\obj\Debug\MyClasskha.csproj.AssemblyReference.cache
+C:\Users\LENOVO\Desktop\GitHub\First-s_iPad_Store\CPE263_Final\MyClasskha\MyClasskha\obj\Debug\MyClasskha.Form1.resources
+C:\Users\LENOVO\Desktop\GitHub\First-s_iPad_Store\CPE263_Final\MyClasskha\MyClasskha\obj\Debug\MyClasskha.Properties.Resources.resources
+C:\Users\LENOVO\Desktop\GitHub\First-s_iPad_Store\CPE263_Final\MyClasskha\MyClasskha\obj\Debug\MyClasskha.csproj.GenerateResource.cache
+C:\Users\LENOVO\Desktop\GitHub\First-s_iPad_Store\CPE263_Final\MyClasskha\MyClasskha\obj\Debug\MyClasskha.csproj.CoreCompileInputs.cache
+C:\Users\LENOVO\Desktop\GitHub\First-s_iPad_Store\CPE263_Final\MyClasskha\MyClasskha\obj\Debug\MyClasskha.exe
+C:\Users\LENOVO\Desktop\GitHub\First-s_iPad_Store\CPE263_Final\MyClasskha\MyClasskha\obj\Debug\MyClasskha.pdb

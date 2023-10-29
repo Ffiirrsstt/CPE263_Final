@@ -30,7 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnWorking = new System.Windows.Forms.Button();
             this.btnOjeectEle = new System.Windows.Forms.Button();
             this.ONOFF = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -77,7 +77,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.button2);
+            this.tabPage1.Controls.Add(this.btnWorking);
             this.tabPage1.Controls.Add(this.btnOjeectEle);
             this.tabPage1.Controls.Add(this.ONOFF);
             this.tabPage1.Controls.Add(this.label6);
@@ -100,17 +100,18 @@
             this.tabPage1.Text = "อุปกรณ์ไฟฟ้า";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnWorking
             // 
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.button2.Location = new System.Drawing.Point(363, 255);
-            this.button2.Margin = new System.Windows.Forms.Padding(4);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(299, 50);
-            this.button2.TabIndex = 12;
-            this.button2.Text = "Working";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.btnWorking_Click);
+            this.btnWorking.Enabled = false;
+            this.btnWorking.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.btnWorking.Location = new System.Drawing.Point(363, 255);
+            this.btnWorking.Margin = new System.Windows.Forms.Padding(4);
+            this.btnWorking.Name = "btnWorking";
+            this.btnWorking.Size = new System.Drawing.Size(299, 50);
+            this.btnWorking.TabIndex = 12;
+            this.btnWorking.Text = "Working";
+            this.btnWorking.UseVisualStyleBackColor = true;
+            this.btnWorking.Click += new System.EventHandler(this.btnWorking_Click);
             // 
             // btnOjeectEle
             // 
@@ -424,7 +425,7 @@
         private System.Windows.Forms.TextBox type;
         private System.Windows.Forms.TextBox comp;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnWorking;
         private System.Windows.Forms.Button btnOjeectEle;
         private System.Windows.Forms.TextBox ONOFF;
         private System.Windows.Forms.Label label6;
