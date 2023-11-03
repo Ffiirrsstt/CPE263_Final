@@ -11,6 +11,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using NAudio.Wave;
 using System.Reflection.Emit;
 using NAudio.Utils;
+using static System.Windows.Forms.LinkLabel;
 
 namespace housework
 {
@@ -45,6 +46,20 @@ namespace housework
             }
         }
 
+        //แปลงตำแหน่งในเสียงให้เป็นเวลาแบบนาทีและวินาที
+        string strTime(double forTime)
+        {
+            int forTotalTime = ((int)forTime) / 1000;
+            int dataSeconds = forTotalTime % 60;
+            return forTotalTime / 60 + " : " + strSeconds(dataSeconds);
+        }
+
+        //เช็กเลขวินาที ต้องการแบบ 0:01 ไม่ใช่ 0:1 
+        string strSeconds(int dataSeconds)
+        {
+            return dataSeconds < 10 ? "0" + dataSeconds : dataSeconds.ToString();
+        }
+
         //เปิดเพลง
         async Task openSound()
         {
@@ -55,7 +70,10 @@ namespace housework
             audioSound.Init(audioFile);
             pitch(); //ปรับระดับเสียง
             audioSound.Play();
+
             btnRUNAndSTOP.ImageLocation = Application.StartupPath + "/run.png";
+            label2.Text = "0 : 00";
+            timeEnd.Text = strTime(audioFile.TotalTime.TotalMilliseconds);
 
             audioSound.PlaybackStopped += (s, args) =>
             {
@@ -118,6 +136,39 @@ namespace housework
 
         private void Form1_Load(object sender, EventArgs e)
         {
+        }
+
+        private void timer1_Tick(object sender, EventArgs e) //การคำนวณนี้ การแปลงเป็นทศนิยมสำคัญมาก
+        {
+            if (audioFile != null)
+            {
+                int progressPercentage = (int)((double)audioFile.Position / audioFile.Length * progressBar.Maximum); //ทำให้เป็นอัตราส่วนของ progressBar 
+                progressBar.Value = progressPercentage;
+
+                //แสดงกำกับว่าเสียงได้เล่นไปนานเท่าไหร่แล้ว
+                long positionBytes = audioFile.Position;
+                TimeSpan positionTime = TimeSpan.FromSeconds((double)positionBytes / audioFile.WaveFormat.AverageBytesPerSecond);
+                label2.Text = positionTime.Minutes+" : "+ strSeconds(positionTime.Seconds);
+            }
+        }
+
+        private void progressBar_Click(object sender, EventArgs e) //การคำนวณนี้ การแปลงเป็นทศนิยมสำคัญมาก
+        {
+            MouseEventArgs mouseEvent = e as MouseEventArgs;
+
+            if (mouseEvent != null && mouseEvent.Button == MouseButtons.Left)
+            {
+                // ดึงข้อมูลตำแหน่งที่คลิกบน progressBar
+                int positionClick = (int)((double)mouseEvent.X / progressBar.Width * progressBar.Maximum);
+
+                // คำนวณหาตำแหน่งสำหรับไฟล์เสียง
+
+                label3.Text = positionClick + "\n";
+
+                long positionSound = (long)((double)positionClick / progressBar.Maximum * audioFile.Length);
+
+                audioFile.Position = positionSound;
+            }
         }
     }
 }
