@@ -117,5 +117,11 @@
   <ItemGroup>
     <None Include="bin\Debug\OIP.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\view.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\test.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

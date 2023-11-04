@@ -60,10 +60,12 @@ namespace housework
             return dataSeconds < 10 ? "0" + dataSeconds : dataSeconds.ToString();
         }
 
-        //เปิดเพลง
+        //เล่นเพลง
         async Task openSound()
         {
-            turnoffTheMusic();
+            string forTimeEndValue="";
+
+            turnoffTheMusic(); //หยุดเพลงก่อนหน้านี้
             await Task.Delay(200); //หน่วงเวลา 200 มิลลิวินาที
             audioFile = new AudioFileReader(files[playlist.SelectedIndex]);
             audioSound = new WaveOutEvent();
@@ -71,14 +73,26 @@ namespace housework
             pitch(); //ปรับระดับเสียง
             audioSound.Play();
 
+            //โซนตั้งค่า
             btnRUNAndSTOP.ImageLocation = Application.StartupPath + "/run.png";
-            label2.Text = "0 : 00";
-            timeEnd.Text = strTime(audioFile.TotalTime.TotalMilliseconds);
+            timeStart.Text = "0 : 00";
+            forTimeEndValue = strTime(audioFile.TotalTime.TotalMilliseconds); //เก็บค่าเวลาที่เพลงจบ(ความยาวเพลง)
+            timeEnd.Text = forTimeEndValue;
 
             audioSound.PlaybackStopped += (s, args) =>
             {
+                timeStart.Text = forTimeEndValue;
                 turnoffTheMusic();
             };
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //รูปเคลื่อนไหวพื้นหลัง
+            string path = Application.StartupPath + "\\imgbg.gif";
+            bg.Image = Image.FromFile(path);
+
+            playlist.Hide();
         }
 
         //กดเลือกเสียงที่ต้องการฟังในบรรดารายการที่เลือกเข้ามา (บรรดารายการจาก listData)
@@ -104,6 +118,8 @@ namespace housework
                 {
                     playlist.Items.Add(files[count]);
                 }
+
+                playlist.Show();
             }
         }
 
@@ -134,10 +150,6 @@ namespace housework
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-        }
-
         private void timer1_Tick(object sender, EventArgs e) //การคำนวณนี้ การแปลงเป็นทศนิยมสำคัญมาก
         {
             if (audioFile != null)
@@ -148,7 +160,7 @@ namespace housework
                 //แสดงกำกับว่าเสียงได้เล่นไปนานเท่าไหร่แล้ว
                 long positionBytes = audioFile.Position;
                 TimeSpan positionTime = TimeSpan.FromSeconds((double)positionBytes / audioFile.WaveFormat.AverageBytesPerSecond);
-                label2.Text = positionTime.Minutes+" : "+ strSeconds(positionTime.Seconds);
+                timeStart.Text = positionTime.Minutes+" : "+ strSeconds(positionTime.Seconds);
             }
         }
 
@@ -158,17 +170,23 @@ namespace housework
 
             if (mouseEvent != null && mouseEvent.Button == MouseButtons.Left)
             {
+                openSound();
+
                 // ดึงข้อมูลตำแหน่งที่คลิกบน progressBar
                 int positionClick = (int)((double)mouseEvent.X / progressBar.Width * progressBar.Maximum);
 
                 // คำนวณหาตำแหน่งสำหรับไฟล์เสียง
 
-                label3.Text = positionClick + "\n";
-
                 long positionSound = (long)((double)positionClick / progressBar.Maximum * audioFile.Length);
 
                 audioFile.Position = positionSound;
             }
+        }
+
+        private void listClear_Click(object sender, EventArgs e)
+        {
+            playlist.Hide();
+            playlist.Items.Clear();
         }
     }
 }
