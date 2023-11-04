@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btnOpenFiles = new System.Windows.Forms.Button();
             this.playlist = new System.Windows.Forms.ListBox();
             this.trackBar = new System.Windows.Forms.TrackBar();
@@ -47,6 +48,7 @@
             // btnOpenFiles
             // 
             this.btnOpenFiles.BackColor = System.Drawing.Color.Black;
+            this.btnOpenFiles.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnOpenFiles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOpenFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOpenFiles.ForeColor = System.Drawing.Color.Lime;
@@ -127,6 +129,7 @@
             // listClear
             // 
             this.listClear.BackColor = System.Drawing.Color.Black;
+            this.listClear.Cursor = System.Windows.Forms.Cursors.Hand;
             this.listClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.listClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listClear.ForeColor = System.Drawing.Color.Lime;
@@ -141,7 +144,7 @@
             // 
             // btnRUNAndSTOP
             // 
-            this.btnRUNAndSTOP.BackColor = System.Drawing.Color.Black;
+            this.btnRUNAndSTOP.BackColor = System.Drawing.Color.White;
             this.btnRUNAndSTOP.Image = global::housework.Properties.Resources.OIP;
             this.btnRUNAndSTOP.Location = new System.Drawing.Point(35, 431);
             this.btnRUNAndSTOP.Name = "btnRUNAndSTOP";
@@ -153,7 +156,7 @@
             // 
             // bg
             // 
-            this.bg.Image = global::housework.Properties.Resources.test;
+            this.bg.Image = global::housework.Properties.Resources.imgbg;
             this.bg.InitialImage = global::housework.Properties.Resources.test;
             this.bg.Location = new System.Drawing.Point(-2, -3);
             this.bg.Name = "bg";
@@ -179,6 +182,7 @@
             this.Controls.Add(this.bg);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.ForeColor = System.Drawing.Color.White;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "Form1";
             this.Text = "Form1";

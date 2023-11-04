@@ -46,6 +46,55 @@ namespace housework
             }
         }
 
+        //แสดงเวลากำกับ ณ เวลาที่เพลงได้เล่นไปแล้วของไฟล์ปัจจุบัน และแสดง ProgreeBar ของการเล่นเพลง ณ ไฟล์ปัจจุบัน
+        void ShowTimeAndProgreeBar()
+        {
+            if (audioFile != null)
+            {
+                //การแสดง ProgressBar
+                int progressPercentage = (int)((double)audioFile.Position / audioFile.Length * progressBar.Maximum); //ทำให้เป็นอัตราส่วนของ progressBar 
+                if (progressPercentage == 99) //เพลงจบแต่ ProgreeBar ไม่เต็ม
+                    progressBar.Value = progressPercentage+1;
+                else progressBar.Value = progressPercentage;
+
+                //การแสดงเวลาที่ label ชื่อ timeStart
+                showTimeCurrent();
+            }
+        }
+
+        //แสดงเวลาที่ label ชื่อ timeStart
+        void showTimeStart(int positionTimeMinutes,int positionTimeSeconds)
+        {
+            timeStart.Text = positionTimeMinutes + " : " + strSeconds(positionTimeSeconds);
+        }
+
+        //แปลงตำแหน่งในเสียงให้เป็นเวลาแบบนาทีและวินาที
+        async Task showTimeCurrent()
+        {
+            int positionTimeMinutes, positionTimeSeconds , forTotalTime ,forBeforeSeconds;
+            double forTime = audioFile.TotalTime.TotalMilliseconds;
+
+            //แสดงกำกับว่าเสียงได้เล่นไปนานเท่าไหร่แล้ว
+            long positionBytes = audioFile.Position;
+            TimeSpan positionTime = TimeSpan.FromSeconds((double)positionBytes / audioFile.WaveFormat.AverageBytesPerSecond);
+            //นาที และวินาทีของเพลง ณ ปัจจุบัน
+            positionTimeMinutes = positionTime.Minutes;
+            positionTimeSeconds = positionTime.Seconds;
+
+            showTimeStart(positionTimeMinutes, positionTimeSeconds); //แสดงเวลา ณ ปัจจุบัน
+
+            //เวลา ณ ตอนจบที่จะเอามาเทียบ
+            //ทำเอาไว้กันแก้ปัญหาที่บางครั้งเพลงจบแล้ว แต่เวลาขาดไปอีก 1 วินาทีจึงจะจบลง
+            forTotalTime = ((int)forTime) / 1000; //แปลงจากมิลลิวินาทีเป็นวินาที
+            forBeforeSeconds = (forTotalTime % 60) -1; //ก่อนจบหนึ่งวินาที อาทิ ระยะเวลาเพลง คือ 4 : 10 , forBeforeSeconds = 9 วินาที
+
+            if (positionTimeMinutes==(forTotalTime / 60)&& positionTimeSeconds== forBeforeSeconds)
+            {
+                await Task.Delay(1000); //หน่วงเวลา 1 วินาที
+                showTimeStart(positionTimeMinutes, positionTimeSeconds+1);
+            }
+        }
+
         //แปลงตำแหน่งในเสียงให้เป็นเวลาแบบนาทีและวินาที
         string strTime(double forTime)
         {
@@ -61,7 +110,7 @@ namespace housework
         }
 
         //เล่นเพลง
-        async Task openSound()
+        async Task openSound(long positionClick = 0) //ถ้าเป็นเล่นเพลงตั้งแต่ต้น เมธอด openSound ไม่ต้องระบุพารามิเตอร์
         {
             string forTimeEndValue="";
 
@@ -74,14 +123,19 @@ namespace housework
             audioSound.Play();
 
             //โซนตั้งค่า
+            // คำนวณหาตำแหน่งสำหรับไฟล์เสียง
+            long positionSound = (long)((double)positionClick / progressBar.Maximum * audioFile.Length);
+            audioFile.Position = positionSound;
+
             btnRUNAndSTOP.ImageLocation = Application.StartupPath + "/run.png";
-            timeStart.Text = "0 : 00";
+            ShowTimeAndProgreeBar(); //แสดงเวลาที่เพลงเล่นไปแล้ว ณ ปัจจุบันกำกับ และแสดง ProgressBar การเล่นของเพลง
             forTimeEndValue = strTime(audioFile.TotalTime.TotalMilliseconds); //เก็บค่าเวลาที่เพลงจบ(ความยาวเพลง)
             timeEnd.Text = forTimeEndValue;
 
             audioSound.PlaybackStopped += (s, args) =>
             {
-                timeStart.Text = forTimeEndValue;
+                //timeStart.Text = forTimeEndValue;
+                //progressBar.Value = 100;
                 turnoffTheMusic();
             };
         }
@@ -92,6 +146,8 @@ namespace housework
             string path = Application.StartupPath + "\\imgbg.gif";
             bg.Image = Image.FromFile(path);
 
+            btnOpenFiles.Width = 902;
+            listClear.Hide();
             playlist.Hide();
         }
 
@@ -111,6 +167,7 @@ namespace housework
 
             if (openFile.ShowDialog() == DialogResult.OK)
             {
+                playlist.Items.Clear();
                 files = openFile.FileNames;
 
                 //แสดงรายละเอียดรายการที่เลือกขึ้นบน listData
@@ -120,6 +177,8 @@ namespace housework
                 }
 
                 playlist.Show();
+                btnOpenFiles.Width = 597;
+                listClear.Show();
             }
         }
 
@@ -152,16 +211,7 @@ namespace housework
 
         private void timer1_Tick(object sender, EventArgs e) //การคำนวณนี้ การแปลงเป็นทศนิยมสำคัญมาก
         {
-            if (audioFile != null)
-            {
-                int progressPercentage = (int)((double)audioFile.Position / audioFile.Length * progressBar.Maximum); //ทำให้เป็นอัตราส่วนของ progressBar 
-                progressBar.Value = progressPercentage;
-
-                //แสดงกำกับว่าเสียงได้เล่นไปนานเท่าไหร่แล้ว
-                long positionBytes = audioFile.Position;
-                TimeSpan positionTime = TimeSpan.FromSeconds((double)positionBytes / audioFile.WaveFormat.AverageBytesPerSecond);
-                timeStart.Text = positionTime.Minutes+" : "+ strSeconds(positionTime.Seconds);
-            }
+            ShowTimeAndProgreeBar();
         }
 
         private void progressBar_Click(object sender, EventArgs e) //การคำนวณนี้ การแปลงเป็นทศนิยมสำคัญมาก
@@ -170,16 +220,12 @@ namespace housework
 
             if (mouseEvent != null && mouseEvent.Button == MouseButtons.Left)
             {
-                openSound();
-
+                //เล่นเพลงในตำแหน่งที่คลิก pressBar
                 // ดึงข้อมูลตำแหน่งที่คลิกบน progressBar
                 int positionClick = (int)((double)mouseEvent.X / progressBar.Width * progressBar.Maximum);
 
-                // คำนวณหาตำแหน่งสำหรับไฟล์เสียง
-
-                long positionSound = (long)((double)positionClick / progressBar.Maximum * audioFile.Length);
-
-                audioFile.Position = positionSound;
+                //ส่งข้อมูลตำแหน่งที่คลิกไปในเมธอดเพื่อเล่นเพลง
+                openSound(positionClick);
             }
         }
 
@@ -187,6 +233,9 @@ namespace housework
         {
             playlist.Hide();
             playlist.Items.Clear();
+
+            listClear.Hide();
+            btnOpenFiles.Width = 902;
         }
     }
 }
