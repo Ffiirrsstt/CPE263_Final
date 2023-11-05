@@ -12,6 +12,7 @@ using NAudio.Wave;
 using System.Reflection.Emit;
 using NAudio.Utils;
 using static System.Windows.Forms.LinkLabel;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace housework
 {
@@ -24,6 +25,7 @@ namespace housework
 
         AudioFileReader audioFile;
         WaveOutEvent audioSound;
+        Boolean loopSetting = false, continueSetting=false;
         string[] files;
         long positionStop = 0; // เก็บค่าตำแหน่งที่จุดกดหยุดเสียง
 
@@ -43,6 +45,55 @@ namespace housework
                 audioFile.Dispose();
                 audioFile = null;
                 audioSound = null;
+                btnRUNAndSTOP.ImageLocation = Application.StartupPath + "\\OIP.jpg";
+            }
+        }
+
+        //การตั้งค่าเกี่ยวกับปุ่มเล่นเพลงเดิมซ้ำ
+        void loogSetting(Boolean dataBoolean)
+        {
+            loopSetting = dataBoolean;
+            if (dataBoolean)
+                btnLoop.BackColor = Color.Pink;
+            else
+                btnLoop.BackColor = Color.White;
+        }
+
+        //การตั้งค่าเกี่ยวกับปุ่มเล่นเพลงถัดไปอัตโนมัติ
+        void contSetting(Boolean dataBoolean)
+        {
+            continueSetting = dataBoolean;
+            if (dataBoolean)
+                btnContinue.BackColor = Color.Pink;
+            else
+                btnContinue.BackColor = Color.White;
+        }
+
+        //เมธอดการเล่นเพลงเดิมซ้ำ และการเล่นเพลงถัดไปโดยอัตโนมัติ
+        async Task loopSound()
+        {
+            if (loopSetting)
+            {
+                if (timeStart.Text == timeEnd.Text)
+                {
+                    openSound();
+                }
+            }
+            else if (continueSetting)
+            {
+                if (timeStart.Text == timeEnd.Text)
+                {
+                    if ((playlist.SelectedIndex + 1) < files.Length)
+                    {
+                        playlist.SelectedIndex = playlist.SelectedIndex + 1; //เล่นเพลงถัดไปในเพลย์ลิสต์
+                    }
+                    else //เพลงปัจจุบันเป็นเพลงสุดท้ายในเพลย์ลิสต์แล้ว
+                    {
+                        playlist.SelectedIndex = 0; //ให้วนกลับไปเริ่มเล่นเพลงแรกในเพลย์ลิสต์
+                        //หมายเหตุ : playlist.SelectedIndex เปลี่ยนก็เท่ากับการเลือกเปลี่ยนเพลงแล้ว
+                    }
+                    //อากิวเมนต์ที่หนึ่งเป็น 0 คือการระบุอากิวเมนต์ให้เพลงเริ่มเล่นตั้งแต่วินาทีที่ 0
+                }
             }
         }
 
@@ -71,7 +122,7 @@ namespace housework
         //แปลงตำแหน่งในเสียงให้เป็นเวลาแบบนาทีและวินาที
         async Task showTimeCurrent()
         {
-            int positionTimeMinutes, positionTimeSeconds , forTotalTime ,forBeforeSeconds;
+            int positionTimeMinutes, positionTimeSeconds , forTotalTime ,forBeforeSeconds, forTotalTimeMinutes;
             double forTime = audioFile.TotalTime.TotalMilliseconds;
 
             //แสดงกำกับว่าเสียงได้เล่นไปนานเท่าไหร่แล้ว
@@ -87,11 +138,19 @@ namespace housework
             //ทำเอาไว้กันแก้ปัญหาที่บางครั้งเพลงจบแล้ว แต่เวลาขาดไปอีก 1 วินาทีจึงจะจบลง
             forTotalTime = ((int)forTime) / 1000; //แปลงจากมิลลิวินาทีเป็นวินาที
             forBeforeSeconds = (forTotalTime % 60) -1; //ก่อนจบหนึ่งวินาที อาทิ ระยะเวลาเพลง คือ 4 : 10 , forBeforeSeconds = 9 วินาที
+            forTotalTimeMinutes = forTotalTime / 60;
 
-            if (positionTimeMinutes==(forTotalTime / 60)&& positionTimeSeconds== forBeforeSeconds)
+            //กรณีเลขนาทีเดียวกัน
+            if (positionTimeMinutes== forTotalTimeMinutes && positionTimeSeconds== forBeforeSeconds)
             {
+                //หน่วงเวลาหนึ่งวินาที เพราะเราเช็กในกรณีที่ถ้าถึงเวลาที่ก่อนเพลงจบหนึ่งวินาที ดังนั้นรออีกหนึ่งวินาทีจึงเป็นเวลาที่เพลงจบพอดี
+                //แก้ปัญหาเพลงจบแล้ว แต่วินาทีของเพลงที่เล่นยังไม่จบ (จากที่ควรเป็น 3:55 ขึ้น 3:54)
                 await Task.Delay(1000); //หน่วงเวลา 1 วินาที
                 showTimeStart(positionTimeMinutes, positionTimeSeconds+1);
+            }else if (positionTimeMinutes+1==forTotalTimeMinutes&& positionTimeSeconds==59) //กรณีคนละเลขนาที
+            {
+                await Task.Delay(1000); //หน่วงเวลา 1 วินาที
+                showTimeStart(positionTimeMinutes+1, 0);
             }
         }
 
@@ -108,9 +167,9 @@ namespace housework
         {
             return dataSeconds < 10 ? "0" + dataSeconds : dataSeconds.ToString();
         }
-
+        //files[playlist.SelectedIndex]
         //เล่นเพลง
-        async Task openSound(long positionClick = 0) //ถ้าเป็นเล่นเพลงตั้งแต่ต้น เมธอด openSound ไม่ต้องระบุพารามิเตอร์
+        async Task openSound(long positionClick = 0) //ถ้าเป็นเล่นเพลงตั้งแต่ต้น(เริ่มเพลงวินาทีที่ 0) เมธอด openSound ไม่ต้องระบุอากิวเมนต์ได้
         {
             string forTimeEndValue="";
 
@@ -134,8 +193,6 @@ namespace housework
 
             audioSound.PlaybackStopped += (s, args) =>
             {
-                //timeStart.Text = forTimeEndValue;
-                //progressBar.Value = 100;
                 turnoffTheMusic();
             };
         }
@@ -149,12 +206,27 @@ namespace housework
             btnOpenFiles.Width = 902;
             listClear.Hide();
             playlist.Hide();
+
+            trackBar.Height = 511;
+            btnLoop.Hide();
+            btnContinue.Hide();
+
+            btnRUNAndSTOP.Hide();
+            progressBar.Hide();
+            timeStart.Hide();
+            timeEnd.Hide();
         }
 
         //กดเลือกเสียงที่ต้องการฟังในบรรดารายการที่เลือกเข้ามา (บรรดารายการจาก listData)
         private void listData_SelectedIndexChanged(object sender, EventArgs e)
         {
             openSound();
+
+            btnRUNAndSTOP.Show();
+            progressBar.Show();
+            timeStart.Show();
+            timeEnd.Show();
+
         }
 
         //เปิดไฟล์เพื่อนำเข้าเสียง
@@ -179,13 +251,18 @@ namespace housework
                 playlist.Show();
                 btnOpenFiles.Width = 597;
                 listClear.Show();
+
+                trackBar.Height = 422;
+                btnLoop.Show();
+                btnContinue.Show();
             }
         }
 
         //trackbar สำหรับปรับระดับเสียง
         private void trackBar_Scroll(object sender, EventArgs e)
         {
-            pitch();
+            if (audioFile !=null && audioSound != null)
+                pitch();
         }
 
         //ปุ่มหยุดเพลงและเล่นเพลงต่อ
@@ -195,23 +272,24 @@ namespace housework
             PathRUN = Application.StartupPath + "/run.png";
             PathStop = Application.StartupPath + "\\OIP.jpg";
 
-            if(btnRUNAndSTOP.ImageLocation == PathRUN)
-            {
-                positionStop = audioFile.Position; //บันทึกตำแหน่งที่หยุดเอาไว้
-                audioSound.Pause();
-                btnRUNAndSTOP.ImageLocation = PathStop;
+            if (audioSound != null && audioFile!=null) {
+                if(btnRUNAndSTOP.ImageLocation == PathRUN)
+                {
+                    positionStop = audioFile.Position; //บันทึกตำแหน่งที่หยุดเอาไว้
+                    audioSound.Pause();
+                    //btnRUNAndSTOP.ImageLocation = PathStop;
+                }
+                else
+                {
+                    audioFile.Position = positionStop; //เล่นต่อจากที่หยุดเอาไว้
+                    audioSound.Play();
+                    //btnRUNAndSTOP.ImageLocation = PathRUN;
+                }
             }
-            else
-            {
-                audioFile.Position = positionStop; //เล่นต่อจากที่หยุดเอาไว้
-                audioSound.Play();
-                btnRUNAndSTOP.ImageLocation = PathRUN;
-            }
-        }
 
-        private void timer1_Tick(object sender, EventArgs e) //การคำนวณนี้ การแปลงเป็นทศนิยมสำคัญมาก
-        {
-            ShowTimeAndProgreeBar();
+            //ต่อให้มีเพลงรันอยู่หรือไม่มี ก็อยากให้มีการตอบสนองไอคอนของปุ่ม
+            btnRUNAndSTOP.ImageLocation = (btnRUNAndSTOP.ImageLocation == PathRUN) ? PathStop : PathRUN;
+
         }
 
         private void progressBar_Click(object sender, EventArgs e) //การคำนวณนี้ การแปลงเป็นทศนิยมสำคัญมาก
@@ -237,5 +315,37 @@ namespace housework
             listClear.Hide();
             btnOpenFiles.Width = 902;
         }
+
+        //รันเพลงซ้ำเมื่อเพลงจบลง
+        private void loop_Click(object sender, EventArgs e)
+        {
+            if (loopSetting)
+                loogSetting(false); //เลือกไม่รันเพลงเดิมซ้ำ
+            else
+            {
+                contSetting(false); //เลือกอยากรันเพลงเดิมซ้ำเรื่อย ๆ ดังนั้นการตั้งค่าให้เล่นเพลงถัดไปโดยอัตโนมัติจึงต้องปิด
+                loogSetting(true);
+            }
+        }
+
+        //รันเพลงถัดไปเมื่อเพลงเดิมจบลง
+        private void btnContinue_Click(object sender, EventArgs e)
+        {
+            if (continueSetting)
+                contSetting(false); //เลือกไม่รันเพลงต่อไปโดยอัตโนมัติ
+            else
+            {
+                loogSetting(false); //เพราะถ้ามันเป็นซ้ำเพลงเดิม มันก็จะไม่รันเพลงถัดไป
+                contSetting(true);
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e) //การคำนวณนี้ การแปลงเป็นทศนิยมสำคัญมาก
+        {
+            ShowTimeAndProgreeBar();
+
+            loopSound(); //เมธอดการเล่นเพลงเดิมซ้ำ และการเล่นเพลงถัดไปโดยอัตโนมัติ
+        }
+
     }
 }

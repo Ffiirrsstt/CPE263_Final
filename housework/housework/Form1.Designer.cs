@@ -38,9 +38,13 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timeStart = new System.Windows.Forms.Label();
             this.listClear = new System.Windows.Forms.Button();
+            this.btnContinue = new System.Windows.Forms.PictureBox();
+            this.btnLoop = new System.Windows.Forms.PictureBox();
             this.btnRUNAndSTOP = new System.Windows.Forms.PictureBox();
             this.bg = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnContinue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnLoop)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnRUNAndSTOP)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bg)).BeginInit();
             this.SuspendLayout();
@@ -83,7 +87,7 @@
             this.trackBar.Maximum = 100;
             this.trackBar.Name = "trackBar";
             this.trackBar.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.trackBar.Size = new System.Drawing.Size(56, 511);
+            this.trackBar.Size = new System.Drawing.Size(56, 422);
             this.trackBar.TabIndex = 2;
             this.trackBar.Value = 50;
             this.trackBar.Scroll += new System.EventHandler(this.trackBar_Scroll);
@@ -142,6 +146,34 @@
             this.listClear.UseVisualStyleBackColor = false;
             this.listClear.Click += new System.EventHandler(this.listClear_Click);
             // 
+            // btnContinue
+            // 
+            this.btnContinue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnContinue.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnContinue.Image = global::housework.Properties.Resources._continue;
+            this.btnContinue.InitialImage = null;
+            this.btnContinue.Location = new System.Drawing.Point(986, 433);
+            this.btnContinue.Name = "btnContinue";
+            this.btnContinue.Size = new System.Drawing.Size(39, 39);
+            this.btnContinue.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnContinue.TabIndex = 11;
+            this.btnContinue.TabStop = false;
+            this.btnContinue.Click += new System.EventHandler(this.btnContinue_Click);
+            // 
+            // btnLoop
+            // 
+            this.btnLoop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btnLoop.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLoop.Image = global::housework.Properties.Resources.loop;
+            this.btnLoop.InitialImage = global::housework.Properties.Resources.loop;
+            this.btnLoop.Location = new System.Drawing.Point(986, 484);
+            this.btnLoop.Name = "btnLoop";
+            this.btnLoop.Size = new System.Drawing.Size(39, 39);
+            this.btnLoop.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.btnLoop.TabIndex = 10;
+            this.btnLoop.TabStop = false;
+            this.btnLoop.Click += new System.EventHandler(this.loop_Click);
+            // 
             // btnRUNAndSTOP
             // 
             this.btnRUNAndSTOP.BackColor = System.Drawing.Color.White;
@@ -170,7 +202,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1039, 535);
+            this.ClientSize = new System.Drawing.Size(1043, 547);
+            this.Controls.Add(this.btnContinue);
+            this.Controls.Add(this.btnLoop);
             this.Controls.Add(this.listClear);
             this.Controls.Add(this.timeStart);
             this.Controls.Add(this.progressBar);
@@ -188,6 +222,8 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnContinue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.btnLoop)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnRUNAndSTOP)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bg)).EndInit();
             this.ResumeLayout(false);
@@ -206,6 +242,8 @@
         private System.Windows.Forms.Label timeStart;
         private System.Windows.Forms.Button listClear;
         private System.Windows.Forms.PictureBox bg;
+        private System.Windows.Forms.PictureBox btnLoop;
+        private System.Windows.Forms.PictureBox btnContinue;
     }
 }
 

@@ -126,5 +126,11 @@
   <ItemGroup>
     <None Include="bin\Debug\imgbg.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\loop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\continue.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
